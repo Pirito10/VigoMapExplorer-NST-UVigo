@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PWA con Mapa</title>
+
+  <!-- Incluimos los ficheros CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <!-- Menú de selección -->
+  <div id="menu">
+    <h2>Selecciona las subcategorías:</h2>
+    <div class="checkbox-group">
+      <h3>Comercio</h3>
+      <label><input type="checkbox" value="comercio/restaurantes"> Restaurantes</label><br>
+      <label><input type="checkbox" value="comercio/areas_comerciales"> Áreas comerciales</label><br>
+      <label><input type="checkbox" value="comercio/mercados"> Ferias y mercados</label><br>
+      <label><input type="checkbox" value="comercio/comercios_artesania"> Comercios de artesanía</label>
+    </div>
+    <div class="checkbox-group">
+      <h3>Cultura y Ocio</h3>
+      <label><input type="checkbox" value="cultura_ocio/museos"> Museos</label><br>
+      <label><input type="checkbox" value="cultura_ocio/monumentos"> Monumentos y esculturas</label><br>
+      <label><input type="checkbox" value="cultura_ocio/cines"> Cines</label><br>
+      <label><input type="checkbox" value="cultura_ocio/auditorios"> Auditorios</label><br>
+      <label><input type="checkbox" value="cultura_ocio/bibliotecas"> Bibliotecas</label><br>
+      <label><input type="checkbox" value="cultura_ocio/centros_instalaciones_culturales"> Centros e instalaciones
+        culturales</label><br>
+      <label><input type="checkbox" value="cultura_ocio/edificios_singulares"> Edificios singulares</label><br>
+      <label><input type="checkbox" value="cultura_ocio/fundaciones_culturales"> Fundaciones culturales</label><br>
+      <label><input type="checkbox" value="cultura_ocio/galerias_arte"> Galerías de arte</label><br>
+      <label><input type="checkbox" value="cultura_ocio/teatros"> Teatros</label><br>
+    </div>
+    <div class="checkbox-group">
+      <h3>Deportes</h3>
+      <label><input type="checkbox" value="deporte/atletismo"> Pistas de Atletismo</label><br>
+      <label><input type="checkbox" value="deporte/campos_futbol"> Campos de Fútbol</label><br>
+      <label><input type="checkbox" value="deporte/complejos_deportivos"> Complejos Deportivos</label><br>
+      <label><input type="checkbox" value="deporte/gimnasios"> Gimnasios Municipales</label><br>
+      <label><input type="checkbox" value="deporte/pabellones"> Pabellones Deportivos</label><br>
+      <label><input type="checkbox" value="deporte/piscinas"> Piscinas Municipales</label>
+    </div>
+    <div class="checkbox-group">
+      <h3>Educación</h3>
+      <label><input type="checkbox" value="educacion/ceip"> CEIP</label><br>
+      <label><input type="checkbox" value="educacion/centros_adultos"> Centros para Adultos</label><br>
+      <label><input type="checkbox" value="educacion/centros_educacion_especial"> Centros de Educación
+        Especial</label><br>
+      <label><input type="checkbox" value="educacion/centros_privados"> Centros Privados</label><br>
+      <label><input type="checkbox" value="educacion/centros_cifp"> Centros CIFP</label><br>
+      <label><input type="checkbox" value="educacion/conservatorios"> Conservatorios</label><br>
+      <label><input type="checkbox" value="educacion/escuela_oficial_idiomas"> Escuela Oficial de Idiomas</label><br>
+      <label><input type="checkbox" value="educacion/escuelas_infantiles"> Escuelas Infantiles</label><br>
+      <label><input type="checkbox" value="educacion/ies"> IES</label><br>
+      <label><input type="checkbox" value="educacion/uvigo"> Centros de la UVigo</label>
+    </div>
+    <div class="checkbox-group">
+      <h3>Medio Ambiente</h3>
+      <label><input type="checkbox" value="medio_ambiente/playas"> Playas</label><br>
+      <label><input type="checkbox" value="medio_ambiente/parques_forestales"> Parques Forestales</label><br>
+      <label><input type="checkbox" value="medio_ambiente/parques_jardines"> Parques y Jardines</label><br>
+      <label><input type="checkbox" value="medio_ambiente/fuentes_manantiales"> Fuentes y Manantiales</label>
+    </div>
+    <div class="checkbox-group">
+      <h3>Movilidad</h3>
+      <label><input type="checkbox" value="movilidad/aparcabicis"> Aparcabicis</label><br>
+      <label><input type="checkbox" value="movilidad/aparcamientos"> Aparcamientos</label><br>
+      <label><input type="checkbox" value="movilidad/camaras_trafico"> Cámaras de Tráfico</label><br>
+      <label><input type="checkbox" value="movilidad/carga_descarga"> Zonas de Carga/Descarga</label><br>
+      <label><input type="checkbox" value="movilidad/estacion_tren"> Estaciones de Tren</label><br>
+      <label><input type="checkbox" value="movilidad/gasolineras"> Gasolineras</label><br>
+      <label><input type="checkbox" value="movilidad/navieras"> Navieras</label><br>
+      <label><input type="checkbox" value="movilidad/paradas_bus"> Paradas de Autobús</label><br>
+      <label><input type="checkbox" value="movilidad/paradas_taxi"> Paradas de Taxi</label><br>
+      <label><input type="checkbox" value="movilidad/plazas_minusvalido"> Plazas para Personas con
+        Discapacidad</label><br>
+      <label><input type="checkbox" value="movilidad/puntos_recarga"> Puntos de Recarga</label>
+    </div>
+    <div class="checkbox-group">
+      <h3>Salud</h3>
+      <label><input type="checkbox" value="salud/centros_salud"> Centros de Salud</label><br>
+      <label><input type="checkbox" value="salud/farmacias"> Farmacias</label><br>
+      <label><input type="checkbox" value="salud/farmacias24h"> Farmacias 24h</label><br>
+      <label><input type="checkbox" value="salud/hospitales"> Hospitales</label><br>
+      <label><input type="checkbox" value="salud/tanatorios"> Tanatorios</label>
+    </div>
+    <div class="checkbox-group">
+      <h3>Seguridad</h3>
+      <label><input type="checkbox" value="seguridad/ambulancias"> Ambulancias</label><br>
+      <label><input type="checkbox" value="seguridad/bomberos"> Bomberos</label><br>
+      <label><input type="checkbox" value="seguridad/policia_autonomica"> Policía Autonómica</label><br>
+      <label><input type="checkbox" value="seguridad/policia_municipal"> Policía Municipal</label><br>
+      <label><input type="checkbox" value="seguridad/policia_nacional"> Policía Nacional</label><br>
+      <label><input type="checkbox" value="seguridad/proteccion_civil"> Protección Civil</label>
+    </div>
+    <div class="checkbox-group">
+      <h3>Sociedad y Bienestar</h3>
+      <label><input type="checkbox" value="sociedad_bienestar/centros_dia"> Centros de Día</label><br>
+      <label><input type="checkbox" value="sociedad_bienestar/centros_inmigracion"> Centros de Inmigración</label><br>
+      <label><input type="checkbox" value="sociedad_bienestar/centros_ocupacionales"> Centros Ocupacionales</label><br>
+      <label><input type="checkbox" value="sociedad_bienestar/centros_violencia_genero"> Centros de Violencia de
+        Género</label><br>
+      <label><input type="checkbox" value="sociedad_bienestar/centros_voluntariado"> Centros de Voluntariado</label><br>
+      <label><input type="checkbox" value="sociedad_bienestar/centros_residenciales"> Centros Residenciales</label><br>
+      <label><input type="checkbox" value="sociedad_bienestar/comedores_sociales"> Comedores Sociales</label><br>
+      <label><input type="checkbox" value="sociedad_bienestar/ludotecas"> Ludotecas</label><br>
+      <label><input type="checkbox" value="sociedad_bienestar/servicios_sociales"> Centros de Servicios
+        Sociales</label><br>
+      <label><input type="checkbox" value="sociedad_bienestar/vivienda_social"> Viviendas de Uso Social</label>
+    </div>
+    <div class="checkbox-group">
+      <h3>Turismo</h3>
+      <label><input type="checkbox" value="turismo/albergues"> Albergues</label><br>
+      <label><input type="checkbox" value="turismo/campings"> Campings</label><br>
+      <label><input type="checkbox" value="turismo/hoteles"> Hoteles</label><br>
+      <label><input type="checkbox" value="turismo/pensiones"> Pensiones</label><br>
+      <label><input type="checkbox" value="turismo/puntos_interes_turistico"> Puntos de Interés Turístico</label>
+    </div>
+
+    <!-- Botón para aplicar los filtros -->
+    <button id="apply-filters">Aplicar filtro</button>
+  </div>
+
+  <!-- Contenedor del mapa -->
+  <div id="map"></div>
+
+  <!-- Vinculamos los ficheros JavaScript -->
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <script src="script.js"></script>
+</body>
+
+</html>

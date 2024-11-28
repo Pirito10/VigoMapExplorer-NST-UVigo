@@ -1,0 +1,74 @@
+{
+    "features": [
+        {
+            "geometry": {
+                "coordinates": [
+                    -8.68078,
+                    42.21487
+                ],
+                "type": "Point"
+            },
+            "type": "Feature",
+            "properties": {
+                "barrio": null,
+                "codigo_postal": "36214",
+                "numero": null,
+                "web": "http://www.edu.xunta.gal/centros/cifpmanuelantonio/",
+                "calle": "AVDA MADRID",
+                "parroquia": null,
+                "lon": -8.68078,
+                "id": 5154,
+                "telefono": "886120750",
+                "nombre": "CIFP Manuel Antonio",
+                "lat": 42.21487
+            }
+        },
+        {
+            "geometry": {
+                "coordinates": [
+                    -8.75185,
+                    42.21476
+                ],
+                "type": "Point"
+            },
+            "type": "Feature",
+            "properties": {
+                "barrio": "VIGO",
+                "codigo_postal": "36209",
+                "numero": 28,
+                "web": null,
+                "calle": "RUA BAIONA",
+                "parroquia": "VIGO",
+                "lon": -8.75185,
+                "id": 1951,
+                "telefono": "886110905",
+                "nombre": "CIFP de Coia",
+                "lat": 42.21476
+            }
+        },
+        {
+            "geometry": {
+                "coordinates": [
+                    -8.68001,
+                    42.21838
+                ],
+                "type": "Point"
+            },
+            "type": "Feature",
+            "properties": {
+                "barrio": "BOUCIÑA",
+                "codigo_postal": "36214",
+                "numero": 160,
+                "web": null,
+                "calle": "CTRA VELLA MADRID",
+                "parroquia": "LAVADORES",
+                "lon": -8.68001,
+                "id": 2019,
+                "telefono": "886110857",
+                "nombre": "CIFP Valentín Paz Andrade",
+                "lat": 42.21838
+            }
+        }
+    ],
+    "type": "FeatureCollection"
+}

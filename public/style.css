@@ -1,0 +1,85 @@
+/* General */
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f4f4f9;
+  color: #333;
+  display: flex;
+  /* Flexbox para colocar el menú y el mapa lado a lado */
+  height: 100vh;
+  /* Toda la altura de la pantalla */
+  overflow: hidden;
+}
+
+/* Menú */
+#menu {
+  width: 30%;
+  /* El menú ocupa el 30% del ancho */
+  max-width: 400px;
+  /* Ancho máximo para evitar que sea demasiado grande */
+  padding: 20px;
+  background: #fff;
+  border-right: 2px solid #ddd;
+  overflow-y: auto;
+  /* Permite el scroll si el contenido excede la altura */
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+  box-sizing: border-box;
+  /* Asegura que padding no afecte el tamaño total */
+}
+
+/* Títulos del menú */
+#menu h2 {
+  font-size: 24px;
+  margin-bottom: 15px;
+  color: #0056b3;
+}
+
+#menu h3 {
+  font-size: 18px;
+  margin: 20px 0 10px;
+  /* Más separación arriba y menos abajo */
+  color: #007bff;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 5px;
+}
+
+/* Checkboxes */
+.checkbox-group label {
+  display: flex;
+  /* Alinea los elementos en una línea */
+  align-items: center;
+  font-size: 14px;
+}
+
+.checkbox-group input[type="checkbox"] {
+  margin-right: 8px;
+}
+
+/* Botón */
+button {
+  display: block;
+  width: 100%;
+  margin-top: 20px;
+  padding: 10px;
+  background: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+button:hover {
+  background: #0056b3;
+}
+
+/* Mapa */
+#map {
+  flex-grow: 1;
+  /* El mapa ocupará todo el espacio restante */
+  height: 100vh;
+  /* Altura completa de la pantalla */
+  margin: 0;
+  border-left: 2px solid #ddd;
+}
