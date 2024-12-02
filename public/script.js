@@ -131,7 +131,14 @@ function handleFeature(feature, layer) {
         if (telefono) popupContent += `<br><b>Teléfono:</b> ${telefono}`;
         if (web) popupContent += `<br><b>Web:</b> <a href="${web}" target="_blank">${web}</a>`;
         if (imagen) popupContent += `<br><img src="${imagen}" alt="Imagen" style="max-width: 200px; margin-top: 10px;">`;
-        //if (mp3) popupContent += ;
+        if (mp3) {
+            popupContent += `
+                <br><b>Audio:</b>
+                <audio controls style="width: 100%; margin-top: 10px;">
+                    <source src="${mp3}" type="audio/mpeg">
+                    Tu navegador no soporta el reproductor de audio.
+                </audio>`;
+        }
 
         // Añadir popup al punto
         layer.bindPopup(popupContent);
