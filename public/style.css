@@ -12,51 +12,46 @@ body {
   overflow: hidden;
 }
 
-/* Menú */
+/* Menú de categorías*/
 #menu {
   width: 30%;
-  /* El menú ocupa el 30% del ancho */
   max-width: 400px;
-  /* Ancho máximo para evitar que sea demasiado grande */
   padding: 20px;
   background: #fff;
   border-right: 2px solid #ddd;
   overflow-y: auto;
-  /* Permite el scroll si el contenido excede la altura */
   box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
   box-sizing: border-box;
-  /* Asegura que padding no afecte el tamaño total */
 }
 
-/* Títulos del menú */
+/* Título del menú */
 #menu h2 {
-  font-size: 24px;
+  font-size: 22px;
   margin-bottom: 15px;
   color: #0056b3;
 }
 
+/* Títulos del menú (categorías) */
 #menu h3 {
-  font-size: 18px;
+  font-size: 16px;
   margin: 20px 0 10px;
-  /* Más separación arriba y menos abajo */
   color: #007bff;
   border-bottom: 1px solid #ddd;
   padding-bottom: 5px;
 }
 
-/* Checkboxes */
+/* Checkboxes (subcategorías) */
 .checkbox-group label {
   display: flex;
-  /* Alinea los elementos en una línea */
   align-items: center;
-  font-size: 14px;
+  font-size: 12px;
 }
 
 .checkbox-group input[type="checkbox"] {
   margin-right: 8px;
 }
 
-/* Botón */
+/* Botones */
 button {
   display: block;
   width: 100%;
@@ -77,9 +72,33 @@ button:hover {
 /* Mapa */
 #map {
   flex-grow: 1;
-  /* El mapa ocupará todo el espacio restante */
   height: 100vh;
-  /* Altura completa de la pantalla */
   margin: 0;
   border-left: 2px solid #ddd;
+}
+
+/* Selector de formato */
+#format-selector {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 1000;
+  background: white;
+  padding: 10px;
+  border-radius: 5px;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.3);
+  font-size: 14px;
+}
+
+#format-selector label {
+  margin-right: 5px;
+  font-weight: bold;
+}
+
+#format-selector select {
+  padding: 5px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+  cursor: pointer;
 }

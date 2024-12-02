@@ -128,6 +128,18 @@
   <!-- Contenedor del mapa -->
   <div id="map"></div>
 
+  <!-- Botón para seleccionar el formato de los datos -->
+  <div id="format-selector">
+    <label for="format">Formato:</label>
+    <select id="format">
+      <option value="geojson" selected>GeoJSON</option>
+      <option value="json">JSON</option>
+      <option value="kml">KML</option>
+      <option value="xml">XML</option>
+      <option value="csv">CSV</option>
+    </select>
+  </div>
+
   <!-- Vinculamos los ficheros JavaScript -->
   <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
   <script src="script.js"></script>
