@@ -39,24 +39,43 @@ function loadSelectedSubcategories(subcategories) {
     currentLayers.forEach(layer => map.removeLayer(layer));
     currentLayers = [];
 
-    // Cargar los GeoJSON correspondientes a las subcategorías seleccionadas
-    subcategories.forEach(subcategory => {
-        const geojsonUrl = `/data/${subcategory}.geojson`;
+    // URL base para obtener los datos desde la API
+    const apiBaseUrl = 'https://datos-ckan.vigo.org/api/3/action/package_show?id=';
 
-        fetch(geojsonUrl)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`No se pudo cargar el archivo: ${geojsonUrl}`);
-                }
-                return response.json();
-            })
+    // Cargamos los GeoJSON correspondientes a las subcategorías seleccionadas
+    subcategories.forEach(subcategory => {
+        // Construímos la URL completa, añadiendo el id de la subcategoría
+        const datasetUrl = `${apiBaseUrl}${subcategory}`;
+
+        // Hacemos la solicitud a la API
+        fetch(datasetUrl)
+            .then(response => response.json())
             .then(data => {
-                const layer = L.geoJSON(data, {
-                    onEachFeature: handleFeature // Vincula la función handleFeature
-                }).addTo(map);
-                currentLayers.push(layer); // Guarda la capa para poder eliminarla después
+                // Buscamos el recurso en formato GeoJSON
+                const resources = data.result.resources;
+                const geojsonResource = resources.find(resource => resource.format === "GeoJSON");
+
+                if (geojsonResource) {
+                    // Obtenemos la URL del recurso
+                    const geojsonUrl = geojsonResource.url;
+
+                    // Hacemos la solicitud a la API
+                    fetch(geojsonUrl)
+                        .then(response => response.json())
+                        .then(geojsonData => {
+                            // Añadimos los puntos al mapa
+                            const layer = L.geoJSON(geojsonData, {
+                                onEachFeature: handleFeature // Vincula la función handleFeature
+                            }).addTo(map);
+                            // Guardamos la capa para poder eliminarla después
+                            currentLayers.push(layer);
+                        })
+                        .catch(err => console.error(`Error cargando GeoJSON desde ${geojsonUrl}:`, err));
+                } else {
+                    console.error(`No se encontró un recurso en formato GeoJSON para ${subcategory}`);
+                }
             })
-            .catch(err => console.error(`Error cargando ${geojsonUrl}:`, err));
+            .catch(err => console.error(`Error obteniendo los datos de ${subcategory}:`, err));
     });
 }
 
@@ -118,4 +137,3 @@ function handleFeature(feature, layer) {
         layer.bindPopup(popupContent);
     }
 }
-
