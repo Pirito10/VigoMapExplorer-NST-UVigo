@@ -121,7 +121,7 @@ function handleFeature(feature, layer) {
         const mp3 = getFieldValue(fields.mp3);
 
         // Construir el contenido del popup dinámicamente
-        let popupContent = `<b>${nombre}</b>`;
+        let popupContent = `<b>${nombre}</b><br>`;
         if (direccion) popupContent += `<br><b>Dirección:</b> ${direccion}`;
         if (numero) popupContent += `<br><b>Número:</b> ${numero}`;
         if (cp) popupContent += `<br><b>Código postal:</b> ${cp}`;
