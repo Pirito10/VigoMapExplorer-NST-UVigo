@@ -1,72 +1,87 @@
+/* Variables de diseño */
+:root {
+  --primary-color: #007bff;
+  --primary-hover: #0056b3;
+  --background-color: #f4f4f9;
+  --text-color: #333;
+  --border-color: #ddd;
+  --box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+  --border-radius: 5px;
+}
+
 /* General */
+* {
+  box-sizing: border-box;
+}
+
 body {
   font-family: Arial, sans-serif;
   margin: 0;
   padding: 0;
-  background-color: #f4f4f9;
-  color: #333;
+  background-color: var(--background-color);
+  color: var(--text-color);
   display: flex;
-  /* Flexbox para colocar el menú y el mapa lado a lado */
   height: 100vh;
-  /* Toda la altura de la pantalla */
   overflow: hidden;
+  scroll-behavior: smooth;
 }
 
-/* Menú de categorías*/
+/* Menú de categorías */
 #menu {
   width: 30%;
   max-width: 400px;
-  padding: 20px;
-  background: #fff;
-  border-right: 2px solid #ddd;
+  padding: 1.25rem;
+  background: white;
+  border-right: 2px solid var(--border-color);
   overflow-y: auto;
-  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
-  box-sizing: border-box;
+  box-shadow: var(--box-shadow);
 }
 
 /* Título del menú */
 #menu h2 {
-  font-size: 22px;
-  margin-bottom: 15px;
-  color: #0056b3;
+  font-size: 1.375rem;
+  margin-bottom: 0.9375rem;
+  color: var(--primary-hover);
 }
 
 /* Títulos del menú (categorías) */
 #menu h3 {
-  font-size: 16px;
-  margin: 20px 0 10px;
-  color: #007bff;
-  border-bottom: 1px solid #ddd;
-  padding-bottom: 5px;
+  font-size: 1rem;
+  margin: 2rem 0 0.625rem;
+  color: var(--primary-color);
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 0.3125rem;
 }
 
 /* Checkboxes (subcategorías) */
 .checkbox-group label {
   display: flex;
-  align-items: center;
-  font-size: 12px;
+  align-items: baseline;
+  font-size: 0.75rem;
+  margin-bottom: 10px;
 }
 
 .checkbox-group input[type="checkbox"] {
-  margin-right: 8px;
+  margin-right: 0.5rem;
 }
 
 /* Botones */
 button {
   display: block;
   width: 100%;
-  margin-top: 20px;
-  padding: 10px;
-  background: #007bff;
-  color: #fff;
+  margin-top: 1.25rem;
+  padding: 0.625rem;
+  background: var(--primary-color);
+  color: white;
   border: none;
-  border-radius: 4px;
+  border-radius: var(--border-radius);
   cursor: pointer;
-  font-size: 16px;
+  font-size: 1rem;
+  transition: background 0.3s ease;
 }
 
 button:hover {
-  background: #0056b3;
+  background: var(--primary-hover);
 }
 
 /* Mapa */
@@ -74,7 +89,7 @@ button:hover {
   flex-grow: 1;
   height: 100vh;
   margin: 0;
-  border-left: 2px solid #ddd;
+  border-left: 2px solid var(--border-color);
 }
 
 /* Selector de formato */
@@ -84,21 +99,21 @@ button:hover {
   right: 10px;
   z-index: 1000;
   background: white;
-  padding: 10px;
-  border-radius: 5px;
-  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.3);
-  font-size: 14px;
+  padding: 0.625rem;
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  font-size: 0.875rem;
 }
 
 #format-selector label {
-  margin-right: 5px;
+  margin-right: 0.3125rem;
   font-weight: bold;
 }
 
 #format-selector select {
-  padding: 5px;
-  border-radius: 4px;
-  border: 1px solid #ccc;
-  font-size: 14px;
+  padding: 0.3125rem;
+  border-radius: var(--border-radius);
+  border: 1px solid var(--border-color);
+  font-size: 0.875rem;
   cursor: pointer;
 }
