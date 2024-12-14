@@ -78,9 +78,11 @@ function loadSelectedSubcategories(subcategories) {
                             if (selectedFormat === 'GeoJSON') {
                                 // Si el formato seleccionado es GeoJSON, añadimos los puntos al mapa directamente
                                 processGeoJSON(data);
+                            } else if (selectedFormat === 'JSON') {
+                                processJSON(data);
                             } else if (selectedFormat === 'CSV') {
                                 // Si el formato seleccionado es CSV, procesamos los datos y añadimos los puntos al mapa
-                                processCSVData(data);
+                                processCSV(data);
                             }
                         })
                         .catch(err => console.error(`Error cargando el recurso desde ${resourceUrl}:`, err));
@@ -101,8 +103,41 @@ function processGeoJSON(geoJsonData) {
     currentLayers.push(layer);
 }
 
+// Función para procesar y mostrar datos en formato JSON
+function processJSON(jsonData) {
+    // Array para almacenar los puntos del mapa en formato GeoJSON
+    const geoJsonFeatures = [];
+
+    // Convertimos cada objeto del JSON a un Feature de GeoJSON
+    jsonData.forEach(item => {
+        // Validamos que existan las coordenadas
+        if (item.lat && item.lon) {
+            const feature = {
+                type: 'Feature',
+                geometry: {
+                    type: 'Point',
+                    coordinates: [parseFloat(item.lon), parseFloat(item.lat)]
+                },
+                // Añadimos las propiedades
+                properties: { ...item }
+            };
+            geoJsonFeatures.push(feature);
+        }
+    });
+
+    // Creamos el objeto GeoJSON
+    const geoJsonData = {
+        type: 'FeatureCollection',
+        features: geoJsonFeatures
+    };
+
+    // Añadimos los puntos al mapa
+    processGeoJSON(geoJsonData);
+}
+
+
 // Función para procesar y mostrar datos en formato CSV
-function processCSVData(csvText) {
+function processCSV(csvText) {
     // Array para almacenar los puntos del mapa en formato GeoJSON
     const geoJsonFeatures = [];
 
