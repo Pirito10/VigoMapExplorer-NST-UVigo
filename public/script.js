@@ -1,13 +1,13 @@
 let map; // Variable global para el mapa
 let currentLayers = []; // Lista de capas actuales en el mapa
 
+// Código que se ejecuta al cargar la página
 document.addEventListener('DOMContentLoaded', () => {
-    const applyFiltersButton = document.getElementById('apply-filters');
-
-    // Inicializar el mapa al cargar la página
+    // Inicializamos el mapa
     initializeMap();
 
-    // Manejo del click sobre el botón "Aplicar filtro"
+    // Añadimos un listener al botón "Aplicar filtro"
+    const applyFiltersButton = document.getElementById('apply-filters');
     applyFiltersButton.addEventListener('click', () => {
         // Obtenemos las categorías seleccionadas
         const selectedSubcategories = getSelectedSubcategories();
@@ -35,54 +35,116 @@ function getSelectedSubcategories() {
 
 // Función para cargar los puntos de interés seleccionados
 function loadSelectedSubcategories(subcategories) {
-    // Elimina las capas actuales del mapa
+    // Eliminamos las capas actuales del mapa
     currentLayers.forEach(layer => map.removeLayer(layer));
     currentLayers = [];
 
     // URL base para obtener los datos desde la API
     const apiBaseUrl = 'https://datos-ckan.vigo.org/api/3/action/package_show?id=';
 
-    // Cargamos los GeoJSON correspondientes a las subcategorías seleccionadas
+    // Obtenemos el formato seleccionado
+    const selectedFormat = document.getElementById('format').value;
+    console.log('Formato seleccionado:', selectedFormat); // Depuración
+
+    // Cargamos en el mapa los puntos correspondientes a las subcategorías seleccionadas
     subcategories.forEach(subcategory => {
-        // Construímos la URL completa, añadiendo el id de la subcategoría
+        // Construímos la URL completa, añadiendo el ID de la subcategoría
         const datasetUrl = `${apiBaseUrl}${subcategory}`;
 
         // Hacemos la solicitud a la API
         fetch(datasetUrl)
             .then(response => response.json())
             .then(data => {
-                // Buscamos el recurso en formato GeoJSON
+                // Buscamos el recurso en el formato seleccionado
                 const resources = data.result.resources;
-                const geojsonResource = resources.find(resource => resource.format === "GeoJSON");
+                const selectedResource = resources.find(resource => resource.format === selectedFormat);
 
-                if (geojsonResource) {
+                if (selectedResource) {
                     // Obtenemos la URL del recurso
-                    const geojsonUrl = geojsonResource.url;
+                    const resourceUrl = selectedResource.url;
 
                     // Hacemos la solicitud a la API
-                    fetch(geojsonUrl)
-                        .then(response => response.json())
-                        .then(geojsonData => {
-                            // Añadimos los puntos al mapa
-                            const layer = L.geoJSON(geojsonData, {
-                                onEachFeature: handleFeature // Vincula la función handleFeature
-                            }).addTo(map);
-                            // Guardamos la capa para poder eliminarla después
-                            currentLayers.push(layer);
+                    fetch(resourceUrl)
+                        .then(response => {
+                            // Si el formato seleccionado es CSV, obtenemos el texto en bruto
+                            if (selectedFormat === 'CSV') {
+                                return response.text();
+                            } else {
+                                // Si el formato seleccionado es JSON o GeoJSON, parseamos el texto
+                                return response.json();
+                            }
                         })
-                        .catch(err => console.error(`Error cargando GeoJSON desde ${geojsonUrl}:`, err));
+                        .then(data => {
+                            if (selectedFormat === 'GeoJSON') {
+                                // Si el formato seleccionado es GeoJSON, añadimos los puntos al mapa directamente
+                                processGeoJSON(data);
+                            } else if (selectedFormat === 'CSV') {
+                                // Si el formato seleccionado es CSV, procesamos los datos y añadimos los puntos al mapa
+                                processCSVData(data);
+                            }
+                        })
+                        .catch(err => console.error(`Error cargando el recurso desde ${resourceUrl}:`, err));
                 } else {
-                    console.error(`No se encontró un recurso en formato GeoJSON para ${subcategory}`);
+                    console.error(`No se encontró un recurso en formato ${selectedFormat} para ${subcategory}`);
                 }
             })
             .catch(err => console.error(`Error obteniendo los datos de ${subcategory}:`, err));
     });
 }
 
-//Función para mostrar la información de cada punto
+// Función para agregar los puntos GeoJSON al mapa
+function processGeoJSON(geoJsonData) {
+    const layer = L.geoJSON(geoJsonData, {
+        onEachFeature: handleFeature // Vincula la función handleFeature
+    }).addTo(map);
+    // Guardamos la capa para poder eliminarla después
+    currentLayers.push(layer);
+}
+
+// Función para procesar y mostrar datos en formato CSV
+function processCSVData(csvText) {
+    // Array para almacenar los puntos del mapa en formato GeoJSON
+    const geoJsonFeatures = [];
+
+    // Usamos la librería PapaParse para procesar el CSV
+    Papa.parse(csvText, {
+        // Consideramos la primera fila como encabezados
+        header: true,
+        // Saltamos líneas vacías
+        skipEmptyLines: true,
+        complete: (results) => {
+            results.data.forEach(row => {
+                // Validamos que haya coordenadas
+                if (row.lat && row.lon) {
+                    const feature = {
+                        type: 'Feature',
+                        geometry: {
+                            type: 'Point',
+                            coordinates: [parseFloat(row.lon), parseFloat(row.lat)]
+                        },
+                        // Añadimos las demás columnas como propiedades
+                        properties: { ...row }
+                    };
+                    geoJsonFeatures.push(feature);
+                }
+            });
+
+            // Creamos el objeto GeoJSON
+            const geoJsonData = {
+                type: 'FeatureCollection',
+                features: geoJsonFeatures
+            };
+
+            // Añadimos los puntos al mapa
+            processGeoJSON(geoJsonData);
+        }
+    });
+}
+
+// Función para crear un popup con la información de cada punto
 function handleFeature(feature, layer) {
     if (feature.properties) {
-        // Mapeo de campos: intenta encontrar la información en diferentes claves
+        // Mapeo de campos: un campo puede estar referenciada por diferentes claves, dependiendo de cada fichero
         const fields = {
             nombre: ['nombre', 'title', 'nombre_completo'],
             direccion: ['address', 'direccion', 'calle'],
@@ -97,17 +159,18 @@ function handleFeature(feature, layer) {
             mp3: ['mp3_uri']
         };
 
-        // Función para buscar el valor de un campo en diferentes claves
+        // Función para buscar el valor de un campo por diferentes claves
         const getFieldValue = (keys) => {
             for (const key of keys) {
                 if (feature.properties[key]) {
                     return feature.properties[key];
                 }
             }
-            return null; // Si no se encuentra, devuelve null
+            // Si no se encuentra, devuelve null
+            return null;
         };
 
-        // Obtener los valores para cada campo
+        // Obtenemos los valores para cada campo
         const nombre = getFieldValue(fields.nombre) || 'Sin título';
         const direccion = getFieldValue(fields.direccion);
         const numero = getFieldValue(fields.numero);
@@ -120,7 +183,7 @@ function handleFeature(feature, layer) {
         const imagen = getFieldValue(fields.imagen);
         const mp3 = getFieldValue(fields.mp3);
 
-        // Construir el contenido del popup dinámicamente
+        // Construímos el contenido del popup dinámicamente
         let popupContent = `<b>${nombre}</b><br>`;
         if (direccion) popupContent += `<br><b>Dirección:</b> ${direccion}`;
         if (numero) popupContent += `<br><b>Número:</b> ${numero}`;
@@ -140,7 +203,7 @@ function handleFeature(feature, layer) {
                 </audio>`;
         }
 
-        // Añadir popup al punto
+        // Añadimos el popup al punto
         layer.bindPopup(popupContent);
     }
 }
