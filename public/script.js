@@ -66,10 +66,14 @@ function loadSelectedSubcategories(subcategories) {
                     // Hacemos la solicitud a la API
                     fetch(resourceUrl)
                         .then(response => {
-                            // Si el formato seleccionado es KML o CSV, obtenemos el texto en bruto
                             if (selectedFormat === 'KML' || selectedFormat === 'CSV') {
+                                // Si el formato seleccionado es KML o CSV, obtenemos el texto en bruto
                                 return response.text();
-                            } else {
+                            } else if (selectedFormat === 'XLS') {
+                                //Si el formato seleccionado es XLS, obtenemos los datos en binario
+                                return response.arrayBuffer();
+                            }
+                            else {
                                 // Si el formato seleccionado es GeoJSON o JSON, parseamos el texto
                                 return response.json();
                             }
@@ -82,6 +86,8 @@ function loadSelectedSubcategories(subcategories) {
                                 processJSON(data);
                             } else if (selectedFormat === 'KML') {
                                 processKML(data);
+                            } else if (selectedFormat === 'XLS') {
+                                processXLS(data);
                             } else if (selectedFormat === 'CSV') {
                                 processCSV(data);
                             }
@@ -145,6 +151,48 @@ function processKML(kmlText) {
 
     // Usamos la librería toGeoJSON para convertir el documento XML a un objeto GeoJSON
     const geoJsonData = toGeoJSON.kml(kmlDoc);
+
+    // Añadimos los puntos al mapa
+    processGeoJSON(geoJsonData);
+}
+
+// Función para procesar y mostrar datos en formato XLS
+function processXLS(xlsData) {
+    // Array para almacenar los puntos del mapa en formato GeoJSON
+    const geoJsonFeatures = [];
+
+    // Leermos los datos en binario
+    const workbook = XLSX.read(xlsData, { type: 'binary' });
+    // Obtenemos el nombre de la primera hoja
+    const firstSheetName = workbook.SheetNames[0];
+    // Obtenemos los datos de la primera hoja
+    const worksheet = workbook.Sheets[firstSheetName];
+
+    // Convertimos los datos de la hoja en un objeto JSON
+    const jsonData = XLSX.utils.sheet_to_json(worksheet, { raw: true });
+
+    // Convertimos cada fila en un Feature de GeoJSON
+    jsonData.forEach(row => {
+        // Validamos que existan coordenadas
+        if (row.lat && row.lon) {
+            const feature = {
+                type: 'Feature',
+                geometry: {
+                    type: 'Point',
+                    coordinates: [parseFloat(row.lon), parseFloat(row.lat)]
+                },
+                // Añadimos las propiedades
+                properties: { ...row }
+            };
+            geoJsonFeatures.push(feature);
+        }
+    });
+
+    // Creamos el objeto GeoJSON
+    const geoJsonData = {
+        type: 'FeatureCollection',
+        features: geoJsonFeatures
+    };
 
     // Añadimos los puntos al mapa
     processGeoJSON(geoJsonData);
