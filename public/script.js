@@ -9,11 +9,14 @@ document.addEventListener('DOMContentLoaded', () => {
     // Añadimos un listener al botón "Aplicar filtro"
     const applyFiltersButton = document.getElementById('apply-filters');
     applyFiltersButton.addEventListener('click', () => {
-        // Obtenemos las categorías seleccionadas
+        // Obtenemos las categorías seleccionadas y las cargamos en el mapa
         const selectedSubcategories = getSelectedSubcategories();
-        // Las cargamos
         loadSelectedSubcategories(selectedSubcategories);
     });
+
+    // Añadimos un listener al botón "Descargar datos"
+    const downloadButton = document.getElementById('download-data');
+    downloadButton.addEventListener('click', () => downloadData());
 });
 
 // Función para inicializar el mapa
