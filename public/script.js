@@ -69,8 +69,8 @@ function loadSelectedSubcategories(subcategories) {
                             if (selectedFormat === 'KML' || selectedFormat === 'CSV') {
                                 // Si el formato seleccionado es KML o CSV, obtenemos el texto en bruto
                                 return response.text();
-                            } else if (selectedFormat === 'XLS') {
-                                //Si el formato seleccionado es XLS, obtenemos los datos en binario
+                            } else if (selectedFormat === 'XLS' || selectedFormat === 'SHP') {
+                                //Si el formato seleccionado es XLS o SHP, obtenemos los datos en binario
                                 return response.arrayBuffer();
                             }
                             else {
@@ -90,6 +90,8 @@ function loadSelectedSubcategories(subcategories) {
                                 processXLS(data);
                             } else if (selectedFormat === 'CSV') {
                                 processCSV(data);
+                            } else if (selectedFormat === 'SHP') {
+                                processSHP(data);
                             }
                         })
                         .catch(err => console.error(`Error cargando el recurso desde ${resourceUrl}:`, err));
@@ -161,7 +163,7 @@ function processXLS(xlsData) {
     // Array para almacenar los puntos del mapa en formato GeoJSON
     const geoJsonFeatures = [];
 
-    // Leermos los datos en binario
+    // Leemos los datos en binario
     const workbook = XLSX.read(xlsData, { type: 'binary' });
     // Obtenemos el nombre de la primera hoja
     const firstSheetName = workbook.SheetNames[0];
@@ -236,6 +238,19 @@ function processCSV(csvText) {
             processGeoJSON(geoJsonData);
         }
     });
+}
+
+// Función para procesar y mostrar datos en formato SHAPEFILE
+function processSHP(arrayBuffer) {
+    // Usamos la librería Shapefile.js para procesar los datos del shapefile
+    shp(arrayBuffer)
+        .then(geoJsonData => {
+            // Añadimos los puntos al mapa
+            processGeoJSON(geoJsonData);
+        })
+        .catch(err => {
+            console.error('Error procesando el shapefile:', err);
+        });
 }
 
 // Función para crear un popup con la información de cada punto
