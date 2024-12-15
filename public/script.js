@@ -66,22 +66,23 @@ function loadSelectedSubcategories(subcategories) {
                     // Hacemos la solicitud a la API
                     fetch(resourceUrl)
                         .then(response => {
-                            // Si el formato seleccionado es CSV, obtenemos el texto en bruto
-                            if (selectedFormat === 'CSV') {
+                            // Si el formato seleccionado es KML o CSV, obtenemos el texto en bruto
+                            if (selectedFormat === 'KML' || selectedFormat === 'CSV') {
                                 return response.text();
                             } else {
-                                // Si el formato seleccionado es JSON o GeoJSON, parseamos el texto
+                                // Si el formato seleccionado es GeoJSON o JSON, parseamos el texto
                                 return response.json();
                             }
                         })
                         .then(data => {
+                            // Procesamos los datos según el formato seleccionado, y añadimos los puntos al mapa
                             if (selectedFormat === 'GeoJSON') {
-                                // Si el formato seleccionado es GeoJSON, añadimos los puntos al mapa directamente
                                 processGeoJSON(data);
                             } else if (selectedFormat === 'JSON') {
                                 processJSON(data);
+                            } else if (selectedFormat === 'KML') {
+                                processKML(data);
                             } else if (selectedFormat === 'CSV') {
-                                // Si el formato seleccionado es CSV, procesamos los datos y añadimos los puntos al mapa
                                 processCSV(data);
                             }
                         })
@@ -97,7 +98,8 @@ function loadSelectedSubcategories(subcategories) {
 // Función para agregar los puntos GeoJSON al mapa
 function processGeoJSON(geoJsonData) {
     const layer = L.geoJSON(geoJsonData, {
-        onEachFeature: handleFeature // Vincula la función handleFeature
+        // Añadimos un popup con la información de cada punto
+        onEachFeature: handleFeature
     }).addTo(map);
     // Guardamos la capa para poder eliminarla después
     currentLayers.push(layer);
@@ -135,6 +137,18 @@ function processJSON(jsonData) {
     processGeoJSON(geoJsonData);
 }
 
+// Función para procesar y mostrar datos en formato KML
+function processKML(kmlText) {
+    // Convertimos el texto KML a un documento XML
+    const parser = new DOMParser();
+    const kmlDoc = parser.parseFromString(kmlText, 'application/xml');
+
+    // Usamos la librería toGeoJSON para convertir el documento XML a un objeto GeoJSON
+    const geoJsonData = toGeoJSON.kml(kmlDoc);
+
+    // Añadimos los puntos al mapa
+    processGeoJSON(geoJsonData);
+}
 
 // Función para procesar y mostrar datos en formato CSV
 function processCSV(csvText) {
