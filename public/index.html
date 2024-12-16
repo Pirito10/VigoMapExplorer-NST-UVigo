@@ -126,6 +126,11 @@
 
     <!-- Botón para descargar los datos -->
     <button id="download-data">Descargar datos</button>
+
+    <!-- Enlace de ayuda -->
+    <p id="import-info-link">
+      <a id="open-import-info">Importar a Google Maps</a>
+    </p>
   </div>
 
   <!-- Contenedor del mapa -->
@@ -142,6 +147,22 @@
       <option value="CSV">CSV</option>
       <option value="SHP">Shapefile</option>
     </select>
+  </div>
+
+  <!-- Ventana de ayuda -->
+  <div id="import-modal" class="modal">
+    <div class="modal-content">
+      <span class="close" id="close-modal">&times;</span>
+      <h2>Cómo importar a Google Maps</h2>
+      <p>Sigue estos pasos para importar el archivo descargado en Google Maps:</p>
+      <ol>
+        <li>Accede a <a href="https://www.google.com/mymaps" target="_blank">Google My Maps</a>.</li>
+        <li>Haz clic en <strong>Crear un nuevo mapa</strong>.</li>
+        <li>En la parte superior izquierda, selecciona <strong>Importar</strong>.</li>
+        <li>Selecciona el archivo KML descargado.</li>
+      </ol>
+      <p>¡Listo! Ahora puedes ver y personalizar tu mapa con los puntos importados.</p>
+    </div>
   </div>
 
   <!-- Vinculamos las librerías y ficheros JavaScript -->

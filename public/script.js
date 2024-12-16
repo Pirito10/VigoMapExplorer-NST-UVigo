@@ -17,6 +17,31 @@ document.addEventListener('DOMContentLoaded', () => {
     // Añadimos un listener al botón "Descargar datos"
     const downloadButton = document.getElementById('download-data');
     downloadButton.addEventListener('click', () => downloadData());
+
+    // Obtenemos los elementos de la ventana de ayuda
+    const modal = document.getElementById('import-modal');
+    const openLink = document.getElementById('open-import-info');
+    const closeBtn = document.getElementById('close-modal');
+
+    // Añadimos un listener al enlace de ayuda
+    openLink.addEventListener('click', () => {
+        // Mostramos la ventana de ayuda
+        modal.style.display = 'block';
+    });
+
+    // Añadimos un listener al botón de cerrar
+    closeBtn.addEventListener('click', () => {
+        // Ocultamos la ventana de ayuda
+        modal.style.display = 'none';
+    });
+
+    // Añadimos un listener a la ventana de ayuda
+    modal.addEventListener('click', (event) => {
+        // Ocultamos la ventana de ayuda si se hace el click fuera
+        if (event.target === modal) {
+            modal.style.display = 'none';
+        }
+    });
 });
 
 // Función para inicializar el mapa
