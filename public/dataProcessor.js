@@ -1,11 +1,27 @@
 // Función para agregar los puntos GeoJSON al mapa
 function processGeoJSON(geoJsonData) {
+    // Asignamos un ID único a cada punto
+    geoJsonData.features = geoJsonData.features.map(feature => {
+        if (!feature.id) {
+            feature.id = `point-${pointCounter++}`;
+        }
+        return feature;
+    });
+
+    // Creamos una capa y la añadimos al mapa
     const layer = L.geoJSON(geoJsonData, {
         // Añadimos un popup con la información de cada punto
         onEachFeature: handleFeature
     }).addTo(map);
+
+    // Asignamos un ID único a la capa
+    layer.layerId = `layer-${layerCounter++}`;
+
+    // Asociamos los puntos a la capa
+    layer.geoJsonData = geoJsonData;
+
     // Guardamos la capa para poder eliminarla después
-    currentLayers.push(layer);
+    layers.push(layer);
 }
 
 // Función para procesar y mostrar datos en formato JSON
@@ -202,13 +218,15 @@ function handleFeature(feature, layer) {
         if (web) popupContent += `<br><b>Web:</b> <a href="${web}" target="_blank">${web}</a>`;
         if (imagen) popupContent += `<br><img src="${imagen}" alt="Imagen" style="max-width: 200px; margin-top: 10px;">`;
         if (mp3) {
-            popupContent += `
-                <br><b>Audio:</b>
-                <audio controls style="width: 100%; margin-top: 10px;">
+            popupContent += `<audio controls style="width: 100%; margin-top: 10px;">
                     <source src="${mp3}" type="audio/mpeg">
                     Tu navegador no soporta el reproductor de audio.
                 </audio>`;
         }
+        // Añadimos el botón para borrar
+        popupContent += `<button onclick="removePoint('${feature.id}')">
+                <i class="fas fa-trash"></i>
+            </button>`;
 
         // Añadimos el popup al punto
         layer.bindPopup(popupContent);

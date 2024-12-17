@@ -1,9 +1,22 @@
 // Función para consolidar datos y descargarlos en formato KML
 function downloadData() {
-    // Obtenemos las categorías seleccionadas
+    // Comprobamos si hay puntos cargados en el mapa
+    if (layers.length > 0) {
+        // Consolidamos los puntos de todas las capas en formato GeoJSON
+        const consolidatedFeatures = layers.flatMap(layer => layer.geoJsonData.features);
+
+        // Generamos el fichero KML
+        const consolidatedKML = generateKML(consolidatedFeatures);
+
+        // Descargamos el fichero
+        exportToFile(consolidatedKML, 'datos.kml', 'application/vnd.google-earth.kml+xml');
+        return;
+    }
+
+    // Si no hay puntos cargados en el mapa, obtenemos las categorías seleccionadas
     const selectedSubcategories = getSelectedSubcategories();
     if (selectedSubcategories.length === 0) {
-        alert('Por favor, selecciona al menos una subcategoría.');
+        alert('Por favor, selecciona al menos una subcategoría');
         return;
     }
 
@@ -186,5 +199,4 @@ function exportToFile(content, filename, mimeType) {
     URL.revokeObjectURL(url);
 }
 
-// TODO escape XML characters (probar con restaurantes)
 // TODO personalizacion

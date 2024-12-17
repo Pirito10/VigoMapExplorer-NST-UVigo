@@ -174,3 +174,26 @@ button:hover {
 .close:focus {
   color: #000;
 }
+
+/* Botón de eliminar punto en el popup */
+.leaflet-popup-content button {
+  background-color: #dc3545;
+  color: #fff;
+  border: 2px solid #dddddd;
+  border-radius: 50%;
+  width: 35px;
+  height: 35px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 18px;
+  cursor: pointer;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  margin: 10px auto;
+  transition: all 0.2s ease;
+}
+
+.leaflet-popup-content button:hover {
+  background-color: #c82333;
+  transform: scale(1.1);
+}
