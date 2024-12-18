@@ -137,8 +137,8 @@
   <!-- Contenedor del mapa -->
   <div id="map"></div>
 
-  <!-- Botón para seleccionar el formato de los datos -->
-  <div id="format-selector">
+  <!-- Selector de formato de los datos -->
+  <div id="format-selector" class="selector-container">
     <label>Formato:</label>
     <select id="format">
       <option value="GeoJSON" selected>GeoJSON</option>
@@ -147,6 +147,15 @@
       <option value="XLS">XLS</option>
       <option value="CSV">CSV</option>
       <option value="SHP">Shapefile</option>
+    </select>
+  </div>
+
+  <!--Selector de idioma-->
+  <div id="language-selector" class="selector-container">
+    <label>Idioma:</label>
+    <select id="language">
+      <option value="español" selected>Español</option>
+      <option value="gallego">Gallego</option>
     </select>
   </div>
 

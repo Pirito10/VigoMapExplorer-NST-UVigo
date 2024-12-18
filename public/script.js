@@ -82,6 +82,10 @@ function loadSelectedSubcategories(subcategories) {
     const selectedFormat = document.getElementById('format').value;
     console.log('Formato seleccionado:', selectedFormat); // Depuración
 
+    // Obtenemos el idioma seleccionado
+    const selectedLanguage = document.getElementById('language').value;
+    console.log('Idioma seleccionado:', selectedLanguage); // Depuración
+
     // Cargamos en el mapa los puntos correspondientes a las subcategorías seleccionadas
     subcategories.forEach(subcategory => {
         // Construímos la URL completa, añadiendo el ID de la subcategoría
@@ -91,9 +95,26 @@ function loadSelectedSubcategories(subcategories) {
         fetch(datasetUrl)
             .then(response => response.json())
             .then(data => {
-                // Buscamos el recurso en el formato seleccionado
-                const resources = data.result.resources;
-                const selectedResource = resources.find(resource => resource.format === selectedFormat);
+                // Buscamos los recursos disponibles en el formato seleccionado
+                const resources = data.result.resources.filter(resource => resource.format === selectedFormat);
+                console.log(`Recursos de la subcategoría "${subcategory}" encontrados en formato ${selectedFormat}: ${resources.length}`); // Depuración
+
+                // Buscamos el recurso disponibles en el idioma seleccionado
+                const selectedResource = resources.find(resource => {
+                    // Extraemos el idioma del recurso usando una expresión regular
+                    const match = resource.name.match(/\(([^)]+)\)\s*\(.*\)/);
+
+                    // Comprobamos si el idioma del recurso coincide con el idioma seleccionado por el usuario
+                    if (match && match[1]) {
+                        return match[1] === selectedLanguage;
+                    }
+
+                    // Descartamos el recurso si no se encontró idioma
+                    return false;
+                    // Si no encontramos el recurso en el idioma deseado, usamos el primero
+                }) || resources[0];
+
+                console.log(`Recurso seleccionado: ${selectedResource.name}`)
 
                 if (selectedResource) {
                     // Obtenemos la URL del recurso
@@ -140,22 +161,24 @@ function loadSelectedSubcategories(subcategories) {
 }
 
 // Función para eliminar un punto del mapa
-function removePoint(pointId) {
+function removePoint(pointID) {
     // Recorremos todas las capas
     for (const layer of layers) {
         // Filtramos los puntos para eliminar el que corresponda con el seleccionado
-        const updatedFeatures = layer.geoJsonData.features.filter(feature => feature.id !== pointId);
+        const updatedFeatures = layer.geoJsonData.features.filter(feature => feature.id !== pointID);
 
         if (updatedFeatures.length < layer.geoJsonData.features.length) {
             // Si el punto estaba en esa capa, la actualizamos
             layer.geoJsonData.features = updatedFeatures;
+            console.log(`Eliminado punto con ID ${pointID}`); // Depuración
 
             // Eliminamos la capa antigua del mapa
             map.removeLayer(layer);
 
             // Si no quedan más puntos en la capa, la eliminamos de la lista
             if (updatedFeatures.length === 0) {
-                layers = layers.filter(l => l.layerId !== layer.layerId);
+                layers = layers.filter(l => l.layerID !== layer.layerID);
+                console.log(`Eliminada capa con ID ${layer.layerID}`); // Depuración
                 break;
             }
 
@@ -165,11 +188,11 @@ function removePoint(pointId) {
             }).addTo(map);
 
             // Mantenemos el ID de la capa antigua
-            updatedLayer.layerId = layer.layerId;
+            updatedLayer.layerID = layer.layerID;
             updatedLayer.geoJsonData = layer.geoJsonData;
 
             // Reemplazamos la capa en la lista de capas
-            layers = layers.map(l => l.layerId === layer.layerId ? updatedLayer : l);
+            layers = layers.map(l => l.layerID === layer.layerID ? updatedLayer : l);
 
             break;
         }

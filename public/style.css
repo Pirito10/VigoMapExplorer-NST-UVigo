@@ -92,10 +92,9 @@ button:hover {
   border-left: 2px solid var(--border-color);
 }
 
-/* Selector de formato */
-#format-selector {
+/* Selectores */
+.selector-container {
   position: absolute;
-  top: 10px;
   right: 10px;
   z-index: 1000;
   background: white;
@@ -105,12 +104,35 @@ button:hover {
   font-size: 0.875rem;
 }
 
-#format-selector label {
+.selector-container label {
   margin-right: 0.3125rem;
   font-weight: bold;
 }
 
-#format-selector select {
+.selector-container select {
+  padding: 0.3125rem;
+  border-radius: var(--border-radius);
+  border: 1px solid var(--border-color);
+  font-size: 0.875rem;
+  cursor: pointer;
+}
+
+/* Selector de formato */
+#format-selector {
+  top: 10px;
+}
+
+/* Selector de idioma */
+#language-selector {
+  top: 70px;
+}
+
+#language-selector label {
+  margin-right: 0.3125rem;
+  font-weight: bold;
+}
+
+#language-selector select {
   padding: 0.3125rem;
   border-radius: var(--border-radius);
   border: 1px solid var(--border-color);

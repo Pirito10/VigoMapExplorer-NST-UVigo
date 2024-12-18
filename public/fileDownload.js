@@ -23,6 +23,10 @@ function downloadData() {
     // URL base para obtener los datos desde la API
     const apiBaseUrl = 'https://datos-ckan.vigo.org/api/3/action/package_show?id=';
 
+    // Obtenemos el idioma seleccionado
+    const selectedLanguage = document.getElementById('language').value;
+    console.log('Idioma seleccionado:', selectedLanguage); // Depuración
+
     // Procesamos cada subcategoría seleccionada
     const fetchPromises = selectedSubcategories.map(subcategory => {
         // Construímos la URL completa, añadiendo el ID de la subcategoría
@@ -32,9 +36,25 @@ function downloadData() {
         return fetch(datasetUrl)
             .then(response => response.json())
             .then(data => {
-                // Buscamos el recurso en formato KML
-                const resources = data.result.resources;
-                const selectedResource = resources.find(resource => resource.format === 'KML');
+                const resources = data.result.resources.filter(resource => resource.format === 'KML');
+                console.log(`Recursos de la subcategoría "${subcategory}" encontrados en formato KML: ${resources.length}`); // Depuración
+
+                // Buscamos el recurso disponibles en el idioma seleccionado
+                const selectedResource = resources.find(resource => {
+                    // Extraemos el idioma del recurso usando una expresión regular
+                    const match = resource.name.match(/\(([^)]+)\)\s*\(.*\)/);
+
+                    // Comprobamos si el idioma del recurso coincide con el idioma seleccionado por el usuario
+                    if (match && match[1]) {
+                        return match[1] === selectedLanguage;
+                    }
+
+                    // Descartamos el recurso si no se encontró idioma
+                    return false;
+                    // Si no encontramos el recurso en el idioma deseado, usamos el primero
+                }) || resources[0];
+
+                console.log(`Recurso seleccionado: ${selectedResource.name}`)
 
                 // Obtenemos la URL del recurso
                 if (selectedResource) {

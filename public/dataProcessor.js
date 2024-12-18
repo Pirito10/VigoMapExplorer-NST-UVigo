@@ -15,7 +15,7 @@ function processGeoJSON(geoJsonData) {
     }).addTo(map);
 
     // Asignamos un ID único a la capa
-    layer.layerId = `layer-${layerCounter++}`;
+    layer.layerID = `layer-${layerCounter++}`;
 
     // Asociamos los puntos a la capa
     layer.geoJsonData = geoJsonData;
