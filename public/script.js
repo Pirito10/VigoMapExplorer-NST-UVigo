@@ -3,6 +3,16 @@ let layers = []; // Lista de capas en el mapa
 let layerCounter = 0; // Contador para el ID de las
 let pointCounter = 0; // Contador para el ID de los puntos
 
+// Cargamos el Service Worker para la PWA
+if ("serviceWorker" in navigator) {
+    window.addEventListener("load", () => {
+        navigator.serviceWorker
+            .register("service-worker.js")
+            .then((reg) => console.log("Service Worker registrado", reg))
+            .catch((err) => console.error("Service Worker error:", err));
+    });
+}
+
 // Código que se ejecuta al cargar la página
 document.addEventListener('DOMContentLoaded', () => {
     // Inicializamos el mapa
