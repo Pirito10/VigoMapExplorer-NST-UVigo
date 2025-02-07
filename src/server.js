@@ -5,7 +5,7 @@ const app = express();
 const PORT = 3000;
 
 // Sirve los archivos estáticos del directorio 'public'
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, '../public')));
 
 // Sirve los archivos de 'data'
 app.use('/data', express.static(path.join(__dirname, 'data')));
