@@ -7,11 +7,8 @@ const PORT = 3000;
 // Sirve los archivos estáticos del directorio 'public'
 app.use(express.static(path.join(__dirname, '../public')));
 
-// Sirve los archivos de 'data'
-app.use('/data', express.static(path.join(__dirname, 'data')));
-
 // Manejar rutas no encontradas
-app.use((req, res, next) => {
+app.use((_req, res) => {
     res.status(404).send('Ruta no encontrada.');
 });
 
