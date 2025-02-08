@@ -2,7 +2,7 @@
 *Vigo Map Explorer* is a **Progressive Web Application** developed as part of the course "[Nuevos Servicios Telemáticos](https://secretaria.uvigo.gal/docnet-nuevo/guia_docent/?ensenyament=V05G301V01&assignatura=V05G301V01405&any_academic=2024_25)" in the Telecommunications Engineering Degree at the Universidad de Vigo (2024 - 2025).
 
 ## About The Project
-This project integrates a [PWA](https://en.wikipedia.org/wiki/Progressive_web_app) designed to navigate a map of Vigo and visualize points of interest. The applications incorporates concepts such as fetching data from an external API, visualizing spatial data from various formats, and the fundamentals of PWA development.
+This project integrates a [PWA](https://en.wikipedia.org/wiki/Progressive_web_app) designed to navigate a map of Vigo and visualize points of interest. The application incorporates concepts such as fetching data from an external API, visualizing spatial data from various formats, and the fundamentals of PWA development.
 
 The project features:
 - Interactive [Leaflet](leafletjs.com) map centered on Vigo.
