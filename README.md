@@ -29,4 +29,4 @@ Then, open your web browser and navigate to `http://localhost:3000`.
 *When running locally, API requests won't work due to CORS restrictions. This limitation can be bypassed using a browser extension like [Moesif CORS](https://chromewebstore.google.com/detail/moesif-origincors-changer/digfbfaphojjndkpccljibejjbppifbc).*
 
 ## About The Code
-There is no dedicated documentation for this project. Refer to [`Presentación.pdf`](docs/Presentación.pdf) for a high-level overview and results, or inspect the code for a deeper understanding of the system and how it works.
+Refer to [`Presentación.pdf`](docs/Presentación.pdf) for a high-level overview of the project, or inspect the code for a deeper understanding of the system and how it works.
